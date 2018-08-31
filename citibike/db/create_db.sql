@@ -1,6 +1,9 @@
+DROP TABLE station;
+DROP TABLE station_status;
+
 CREATE TABLE IF NOT EXISTS station (
- station_id integer PRIMARY KEY,
- name varchar NOT NULL,
+ station_id integer UNIQUE PRIMARY KEY,
+ name varchar(255) NOT NULL,
  short_name varchar NOT NULL,
  lat float NOT NULL,
  lon float NOT NULL,
@@ -8,8 +11,9 @@ CREATE TABLE IF NOT EXISTS station (
  capacity integer NOT NULL,
  rental_url varchar NOT NULL,
  eightd_has_key_dispenser boolean NOT NULL,
- eightd_active_station_services VARCHAR NOT NULL,
- has_kiosk boolean NOT NULL
+ eightd_station_services VARCHAR NOT NULL,
+ has_kiosk boolean NOT NULL,
+ create_time datetime NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS station_status (

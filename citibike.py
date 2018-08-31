@@ -1,8 +1,11 @@
 import requests
 import sqlite3
+
+from citibike.entities.station import Station, StationDb
 from citibike.entities.station_status import StationStatus
 
 station_status_list = []
+station_information = []
 
 # conn = sqlite3.connect('example.db')
 
@@ -33,13 +36,26 @@ station_status_list = []
 resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_status.json')
 data = resp.json()['data']['stations']
 
-
 for datum in data:
     instance = StationStatus()
     for key, value in datum.items():
         if hasattr(instance, key):
             setattr(instance, key, value)
     station_status_list.append(instance)
-    print(instance)
+
+
+# resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json')
+# data = resp.json()['data']['stations']
+#
+# sdb = StationDb()
+# for datum in data:
+#     instance = Station()
+#     for key, value in datum.items():
+#         if hasattr(instance, key):
+#             setattr(instance, key, value)
+#         station_information.append(instance)
+#     sdb.insert_station(instance)
+#
+
 
 print(resp.content)

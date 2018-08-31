@@ -1,27 +1,53 @@
+import time
+
+import datetime
+
 from citibike.entities.citibike_db import CitibikeDb
 
+STATION_TABLE = 'station'
 
 class Station():
-    def __init__(self, station_id=None, name=None, short_name=None, lat=None, lon=None, rental_methods=None,
+    def __init__(self, station_id=None, name=None, short_name=None, lat=None, long=None, rental_methods=None,
                  capacity=None, rental_url=None, eightd_has_key_dispenser=None, eightd_station_services=None,
-                 has_kiosk=None,
+                 has_kiosk=None, create_time=None
                  ):
         self.station_id = station_id
         self.name = name
         self.short_name = short_name
         self.lat = lat
-        self.lon = lon
+        self.lon = long
         self.rental_methods = rental_methods
         self.capacity = capacity
         self.rental_url = rental_url
         self.eightd_has_key_dispenser = eightd_has_key_dispenser
         self.eightd_station_services = eightd_station_services
         self.has_kiosk = has_kiosk
+        self.create_time = create_time
 
 
 class StationDb(CitibikeDb):
     def __init__(self):
-        super(CitibikeDb, self).__init__()
+        super(StationDb, self).__init__()
 
-    def insert_station(self):
-        pass
+    def insert_station(self, station):
+        sql = """INSERT INTO {table} (station_id, name, short_name, lat, lon, rental_methods, capacity, rental_url, 
+              eightd_has_key_dispenser, eightd_station_services, has_kiosk, create_time) VALUES ({station_id}, "{name}", "{short_name}", 
+              {lat}, {lon}, "{rental_methods}", {capacity}, "{rental_url}", {eightd_has_key_dispenser}, 
+              "{eightd_station_services}",{has_kiosk},"{create_time}")
+                """.format(
+            table=STATION_TABLE,
+            station_id=station.station_id,
+            name=station.name,
+            short_name=station.short_name,
+            lat=station.lat,
+            lon=station.lon,
+            rental_methods=station.rental_methods,
+            capacity=station.capacity,
+            rental_url=station.rental_url,
+            eightd_has_key_dispenser=int(station.eightd_has_key_dispenser),
+            eightd_station_services=station.eightd_station_services,
+            has_kiosk=int(station.has_kiosk),
+            create_time=datetime.datetime.now()
+        )
+
+        self.execute_and_commit(sql)

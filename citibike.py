@@ -1,9 +1,10 @@
 import requests
-
+import sqlite3
 from citibike.entities.station_status import StationStatus
 
 station_status_list = []
 
+# conn = sqlite3.connect('example.db')
 
 """
 "feeds": [

@@ -35,6 +35,7 @@ station_information = []
 """
 resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_status.json')
 data = resp.json()['data']['stations']
+ebike_available = 0
 
 for datum in data:
     instance = StationStatus()
@@ -43,6 +44,13 @@ for datum in data:
             setattr(instance, key, value)
     station_status_list.append(instance)
 
+for status in station_status_list:
+    if status.num_ebikes_available > 0:
+        stn = StationDb().get_station_by_id(status.station_id)
+        print("{station}: {ebike} ebikes".format(station=stn.name, ebike=status.num_ebikes_available))
+        ebike_available += 1
+
+print("{} ebikes available citiwide".format(ebike_available))
 
 # resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json')
 # data = resp.json()['data']['stations']
@@ -58,4 +66,4 @@ for datum in data:
 #
 
 
-print(resp.content)
+# print(resp.content)

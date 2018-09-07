@@ -50,4 +50,20 @@ class StationDb(CitibikeDb):
             create_time=datetime.datetime.now()
         )
 
-        self.execute_and_commit(sql)
+        self.insert(sql)
+
+    def get_station_by_id(self, station_id):
+        """
+
+        :param station_id: Id of station to retrieve
+        :type station_id: int
+        :return:
+        """
+        sql = """SELECT * from {table} WHERE station_id = {station_id}""".format(
+            table=STATION_TABLE,
+            station_id=station_id
+        )
+
+        return self.get_single_instance(sql, Station)
+
+

@@ -7,15 +7,16 @@ from citibike.entities.citibike_db import CitibikeDb
 STATION_TABLE = 'station'
 
 class Station():
-    def __init__(self, station_id=None, name=None, short_name=None, lat=None, long=None, rental_methods=None,
-                 capacity=None, rental_url=None, eightd_has_key_dispenser=None, eightd_station_services=None,
-                 has_kiosk=None, create_time=None
+    def __init__(self, station_id=None, name=None, short_name=None, lat=None, long=None, region_id = None,
+                 rental_methods=None, capacity=None, rental_url=None, eightd_has_key_dispenser=None,
+                 eightd_station_services=None,has_kiosk=None, create_time=None
                  ):
         self.station_id = station_id
         self.name = name
         self.short_name = short_name
         self.lat = lat
         self.lon = long
+        self.region_id = region_id
         self.rental_methods = rental_methods
         self.capacity = capacity
         self.rental_url = rental_url
@@ -30,9 +31,9 @@ class StationDb(CitibikeDb):
         super(StationDb, self).__init__()
 
     def insert_station(self, station):
-        sql = """INSERT INTO {table} (station_id, name, short_name, lat, lon, rental_methods, capacity, rental_url, 
+        sql = """INSERT INTO {table} (station_id, name, short_name, lat, lon, region_id, rental_methods, capacity, rental_url, 
               eightd_has_key_dispenser, eightd_station_services, has_kiosk, create_time) VALUES ({station_id}, "{name}", "{short_name}", 
-              {lat}, {lon}, "{rental_methods}", {capacity}, "{rental_url}", {eightd_has_key_dispenser}, 
+              {lat}, {lon}, {region_id}, "{rental_methods}", {capacity}, "{rental_url}", {eightd_has_key_dispenser}, 
               "{eightd_station_services}",{has_kiosk},"{create_time}")
                 """.format(
             table=STATION_TABLE,
@@ -41,6 +42,7 @@ class StationDb(CitibikeDb):
             short_name=station.short_name,
             lat=station.lat,
             lon=station.lon,
+            region_id=station.region_id,
             rental_methods=station.rental_methods,
             capacity=station.capacity,
             rental_url=station.rental_url,

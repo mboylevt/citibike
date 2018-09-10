@@ -25,8 +25,8 @@ station_information = []
 },
 {
 "name": "system_regions",
-"url": "https://gbfs.citibikenyc.com/gbfs/en/system_regions.json"
 },
+"url": "https://gbfs.citibikenyc.com/gbfs/en/system_regions.json"
 {
 "name": "station_information",
 "url": "https://gbfs.citibikenyc.com/gbfs/en/station_information.json"
@@ -47,8 +47,9 @@ for datum in data:
 for status in station_status_list:
     if status.num_ebikes_available > 0:
         stn = StationDb().get_station_by_id(status.station_id)
+        # print("{region} {station}: {ebike} ebikes".format(region = stn.region, station=stn.name, ebike=status.num_ebikes_available))
         print("{station}: {ebike} ebikes".format(station=stn.name, ebike=status.num_ebikes_available))
-        ebike_available += 1
+        ebike_available += status.num_ebikes_available
 
 print("{} ebikes available citiwide".format(ebike_available))
 
@@ -63,7 +64,7 @@ print("{} ebikes available citiwide".format(ebike_available))
 #             setattr(instance, key, value)
 #         station_information.append(instance)
 #     sdb.insert_station(instance)
-#
 
 
-# print(resp.content)
+
+print(resp.content)

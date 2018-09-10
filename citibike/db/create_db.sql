@@ -1,6 +1,3 @@
-DROP TABLE station;
-DROP TABLE station_status;
-
 CREATE TABLE IF NOT EXISTS station (
  station_id integer UNIQUE PRIMARY KEY,
  name varchar(255) NOT NULL,
@@ -34,5 +31,7 @@ CREATE TABLE IF NOT EXISTS station_status (
  create_time DATETIME NOT NULL
 );
 
-select * from station;
-select * from station_status;
+CREATE TABLE IF NOT EXISTS region (
+  region_id INTEGER PRIMARY KEY NOT NULL,
+  name VARCHAR NOT NULL
+)

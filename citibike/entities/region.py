@@ -32,12 +32,15 @@ class RegionDb(CitibikeDb):
         :param station_id: Id of station to retrieve
         :type station_id: int
         :return:
+        :rtype: Region
         """
         sql = """SELECT * from {table} WHERE region_id = {region_id}""".format(
             table=REGION_TABLE,
-            station_id=region_id
+            region_id=region_id
         )
-
         return self.get_single_instance(sql, Region)
 
 
+    def get_all_regions(self):
+        sql = """SELECT * FROM {table}""".format(table=REGION_TABLE)
+        return self.get_all_instances(sql, Region)

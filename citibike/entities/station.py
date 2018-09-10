@@ -60,6 +60,7 @@ class StationDb(CitibikeDb):
         :param station_id: Id of station to retrieve
         :type station_id: int
         :return:
+        :rtype: Station
         """
         sql = """SELECT * from {table} WHERE station_id = {station_id}""".format(
             table=STATION_TABLE,

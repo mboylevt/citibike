@@ -1,7 +1,7 @@
 from flask import Flask
 
 from citibike.util import distance
-from citibike.util.ebike import get_ebikes
+from citibike.util import bike_util
 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ def hello():
 
 @app.route("/ebike")
 def ebike():
-    region_map = get_ebikes()
+    region_map = bike_util.get_ebikes()
     retstr = ''
     for region, stations in region_map.items():
         retstr += "<div>{}: {} bikes</div>".format(region, len(stations))
@@ -27,7 +27,29 @@ def ebike():
                 retstr += "\n"
             retstr += '</ul>'
 
-    print(retstr)
+    return retstr
+
+@app.route('/regions')
+def regions():
+    region_status = bike_util.get_region_status()
+    retstr = ''
+    no_bikes = ''
+    bikes = ''
+    for name in region_status:
+        status = region_status[name]
+        if status.num_bikes_available == 0:
+            no_bikes += "<div>{}: No Bikes Available!</div>".format(name)
+        else:
+            bikes += "<div>{}:".format(name)
+            bikes += '<ul>'
+            bikes += "<li>Bikes Available: {num} </li>".format(num=status.num_bikes_available)
+            bikes += "<li>eBikes Available: {num} </li>".format(num=status.num_ebikes_available)
+            bikes += "<li>Bikes Disabled: {num} </li>".format(num=status.num_bikes_disabled)
+            bikes += "<li>Docks Available: {num} </li>".format(num=status.num_docks_available)
+            bikes += "<li>Docks Disabled: {num} </li>".format(num=status.num_docks_disabled)
+            bikes += '</ul></div>'
+
+    retstr = bikes + no_bikes
     return retstr
 
 if __name__ == "__main__":

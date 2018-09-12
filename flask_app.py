@@ -14,8 +14,24 @@ def hello():
 @app.route("/ebike_template")
 def ebike_template():
     region_map = bike_util.get_ebikes()
+    region_status = {}
 
-    return render_template('ebike.html', region_map=region_map)
+    for region, stations in region_map.items():
+        bike_count = 0
+        region_status[region] = []
+        if stations:
+            for station, status in stations:
+                dist = distance.get_distance(PAS_LATLONG, (station.lat, station.lon))
+                region_status[region].append("{name}: {num} bikes, {dist:.2f}m away".format(name=station.name,
+                                                                                  num=status.num_ebikes_available,
+                                                                                  dist=dist))
+                bike_count += status.num_ebikes_available
+            region_status[region] = [bike_count] + region_status[region]
+        else:
+            region_status[region].append(0)
+
+
+    return render_template('ebike.html', region_status=region_status)
 
 @app.route("/ebike")
 def ebike():

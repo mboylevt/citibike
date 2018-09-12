@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from citibike.util import distance
 from citibike.util import bike_util
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='citibike/templates')
 
 PAS_LATLONG = (40.7436572, -73.9854901)
 
@@ -11,12 +11,18 @@ PAS_LATLONG = (40.7436572, -73.9854901)
 def hello():
     return "Hello World!"
 
+@app.route("/ebike_template")
+def ebike_template():
+    region_map = bike_util.get_ebikes()
+
+    return render_template('ebike.html', region_map=region_map)
+
 @app.route("/ebike")
 def ebike():
     region_map = bike_util.get_ebikes()
     retstr = ''
     for region, stations in region_map.items():
-        retstr += "<div>{}: {} bikes</div>".format(region, len(stations))
+        retstr += "<div>{}: {} E-bikes</div>".format(region, len(stations))
         retstr += "\n"
         if stations:
             retstr += '<ul>'
@@ -28,6 +34,7 @@ def ebike():
             retstr += '</ul>'
 
     return retstr
+
 
 @app.route('/regions')
 def regions():

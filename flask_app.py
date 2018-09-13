@@ -11,7 +11,7 @@ PAS_LATLONG = (40.7436572, -73.9854901)
 def hello():
     return "Hello World!"
 
-@app.route("/ebike_template")
+@app.route("/ebike")
 def ebike_template():
     region_map = bike_util.get_ebikes()
     region_status = {}
@@ -32,25 +32,6 @@ def ebike_template():
 
 
     return render_template('ebike.html', region_status=region_status)
-
-@app.route("/ebike")
-def ebike():
-    region_map = bike_util.get_ebikes()
-    retstr = ''
-    for region, stations in region_map.items():
-        retstr += "<div>{}: {} E-bikes</div>".format(region, len(stations))
-        retstr += "\n"
-        if stations:
-            retstr += '<ul>'
-            for station, status in stations:
-                dist = distance.get_distance(PAS_LATLONG, (station.lat, station.lon))
-                retstr += "<li>{name}: {num} bikes, {dist:.2f}m away</li>".format(name=station.name, num=status.num_ebikes_available,
-                                                                       dist=dist)
-                retstr += "\n"
-            retstr += '</ul>'
-
-    return retstr
-
 
 @app.route('/regions')
 def regions():

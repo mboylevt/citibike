@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 
 from citibike.util import distance
 from citibike.util import bike_util
@@ -10,6 +10,18 @@ PAS_LATLONG = (40.7436572, -73.9854901)
 @app.route("/")
 def hello():
     return "Hello World!"
+
+@app.route('/static/css/<path:path>')
+def send_static_css(path):
+    return send_from_directory('citibike/static/css', path)
+
+@app.route('/static/js/<path:path>')
+def send_static_js(path):
+    return send_from_directory('citibike/static/js', path)
+
+@app.route('/bootstrap')
+def bootstrap():
+    return render_template('bootstrap.html')
 
 @app.route("/ebike")
 def ebike_template():

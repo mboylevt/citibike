@@ -34,9 +34,7 @@ def ebike_template():
         if stations:
             for station, status in stations:
                 dist = distance.get_distance(PAS_LATLONG, (station.lat, station.lon))
-                region_status[region].append("{name}: {num} bikes, {dist:.2f}m away".format(name=station.name,
-                                                                                  num=status.num_ebikes_available,
-                                                                                  dist=dist))
+                region_status[region].append((station.name, status.num_ebikes_available, dist, region))
                 bike_count += status.num_ebikes_available
             region_status[region] = [bike_count] + region_status[region]
         else:

@@ -2,43 +2,68 @@
 {% block title %} EBike Snooper {% endblock %}
 {% block head %}
  {{ super() }}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Ebike Snooper</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="../static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../static/css/dashboard.css" rel="stylesheet">
 {% endblock %}
 {% block body %}
-  <div class="container">
-   {% for region, stations in region_status.items() %}
-    <div>{{ region + ': {} bikes'.format(stations[0]) }}</div>
-      <ul>
-        {% for station in stations[1:] %}
-        <li>{{ station }}</li>
-        {% endfor %}
-        </ul>
-{% endfor %}
-  </div>
-{% endblock %}
 
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#  <head>#}
-{#    <title>EBike Snooper</title>#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
-{#    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">#}
-{#    <style type="text/css">#}
-{#      .container {#}
-{#        max-width: 500px;#}
-{#        padding-top: 100px;#}
-{#      }#}
-{#    </style>#}
-{#  </head>#}
-{#  <body>#}
-{#    <div class="container">#}
-{#       {% for region, stations in region_status.items() %}#}
-{#        <div>{{ region + ': {} bikes'.format(stations[0]) }}</div>#}
-{#          <ul>#}
-{#            {% for station in stations[1:] %}#}
-{#            <li>{{ station }}</li>#}
-{#            {% endfor %}#}
-{#            </ul>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{#  </body>#}
-{#</html>#}
+  <div class="container-fluid">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Regions</h1>
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>NY</h4>
+              <span class="text-muted" cb-region-ny>       </span>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Station List</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Region</th>
+                  <th>Station</th>
+                  <th>Bike Count</th>
+                  <th>Distance from 419</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for region, stations in region_status.items() %}
+                {% for station in stations[1:] %}
+                <tr>
+                  <td>{{ station[3] }}</td>
+                  <td>{{ station[0] }}</td>
+                  <td bike-count>{{ station[1] }}</td>
+                  <td>{{ station[2]|round(2,'floor')}}</td>
+                </tr>
+                {% endfor %}
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+    <script>
+      var total = 0;
+        $.each($('[bike-count]'), function( index, cell ) {
+          total = total + parseInt($(cell).text());
+        });
+      document.querySelector("[cb-region-ny]").innerHTML = total + ' Bikes';
+    </script>
+{% endblock %}

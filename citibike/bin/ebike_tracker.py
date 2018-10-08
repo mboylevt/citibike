@@ -25,7 +25,7 @@ for region in regions:
 
 for status in station_status_list:
     if status.num_ebikes_available > 0:
-        stn = StationDb().get_station_by_id(status.station_id)
+        stn = StationDb().get_station_by_id(status)
         rgn = RegionDb().get_region_by_id(stn.region_id)
         region_map[rgn.name].append((stn, status))
         ebike_available += status.num_ebikes_available

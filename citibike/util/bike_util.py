@@ -1,6 +1,6 @@
 import requests
 from citibike.entities.region import RegionDb
-from citibike.entities.station import StationDb
+from citibike.entities.station import StationDb, Station
 from citibike.entities.station_status import StationStatus
 
 
@@ -11,6 +11,15 @@ class RegionStatus():
         self.num_bikes_disabled = 0
         self.num_docks_available = 0
         self.num_docks_disabled = 0
+
+
+def __get_stations():
+    '''
+
+    :return:
+    :rtype: [Station]
+    '''
+
 
 def __get_station_status():
     '''

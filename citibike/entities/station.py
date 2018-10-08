@@ -42,7 +42,7 @@ class StationDb(CitibikeDb):
             short_name=station.short_name,
             lat=station.lat,
             lon=station.lon,
-            region_id=station.region_id,
+            region_id=station.region_id if station.region_id else 999,
             rental_methods=station.rental_methods,
             capacity=station.capacity,
             rental_url=station.rental_url,

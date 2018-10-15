@@ -54,6 +54,19 @@ def get_ebikes():
     for status in station_status_list:
         if status.num_ebikes_available > 0:
             stn = StationDb().get_station_by_id(status.station_id)
+            if not stn:
+                resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json')
+                data = resp.json()['data']['stations']
+                instance = Station()
+                for datum in data:
+                    if datum['station_id'] == status.station_id:
+
+                        for key, value in datum.items():
+                            if hasattr(instance, key):
+                                setattr(instance, key, value)
+                        StationDb().insert_station(instance)
+                        break
+                stn = instance
             rgn = RegionDb().get_region_by_id(stn.region_id)
             region_map[rgn.name].append((stn, status))
     return region_map

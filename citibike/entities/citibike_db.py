@@ -112,10 +112,11 @@ class CitibikeDb():
         try:
             instance = get_object_from_dictionary_representation(dictionary=record, class_type=class_type)
         except AttributeError:
-            raise RuntimeError('No records found for {class_type} with sql: \n {sql}'.format(
-                sql=sql,
-                class_type=class_type
-            ))
+            # raise RuntimeError('No records found for {class_type} with sql: \n {sql}'.format(
+            #     sql=sql,
+            #     class_type=class_type
+            # ))
+            instance = None
         return instance
 
     def get_all_instances(self, sql, class_type, *args, **kwargs):

@@ -1,3 +1,5 @@
+from _operator import itemgetter
+
 from flask import Flask, render_template, send_from_directory
 
 from citibike.util import distance
@@ -34,13 +36,16 @@ def ebike_template():
         if stations:
             for station, status in stations:
                 dist = distance.get_distance(PAS_LATLONG, (station.lat, station.lon))
-                region_status[region].append((station.name, status.num_ebikes_available, dist, region))
+                region_status[region].append(
+                    [station.name, status.num_ebikes_available, status.num_bikes_available, dist, region]
+                )
                 bike_count += status.num_ebikes_available
             region_status[region] = [bike_count] + region_status[region]
         else:
             region_status[region].append(0)
 
-
+    # for region in region_status:
+    #     region_status[region] = sorted(region_status[region], key=lambda x: x[3])
     return render_template('ebike.html', region_status=region_status)
 
 @app.route('/regions')

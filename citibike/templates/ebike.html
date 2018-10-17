@@ -32,25 +32,28 @@
             </div>
           </div>
 
+
           <h2 class="sub-header">Station List</h2>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="bikeList">
               <thead>
                 <tr>
-                  <th>Region</th>
-                  <th>Station</th>
-                  <th>Bike Count</th>
-                  <th>Distance from 419</th>
+                  <th onclick="sortTable(0)">Region</th>
+                  <th onclick="sortTable(1)">Station</th>
+                  <th onclick="sortTable(2)">E-Bike Count</th>
+                  <th onclick="sortTable(3)">Bike Count</th>
+                  <th onclick="sortTable(4)">Distance from 419</th>
                 </tr>
               </thead>
               <tbody>
               {% for region, stations in region_status.items() %}
                 {% for station in stations[1:] %}
                 <tr>
-                  <td>{{ station[3] }}</td>
+                  <td>{{ station[4] }}</td>
                   <td>{{ station[0] }}</td>
                   <td bike-count>{{ station[1] }}</td>
-                  <td>{{ station[2]|round(2,'floor')}}</td>
+                  <td>{{ station[2] }}</td>
+                  <td>{{ station[3]|round(2,'floor')}}</td>
                 </tr>
                 {% endfor %}
               {% endfor %}
@@ -65,5 +68,9 @@
           total = total + parseInt($(cell).text());
         });
       document.querySelector("[cb-region-ny]").innerHTML = total + ' Bikes';
+      window.onload = function() {
+        sortTable(4);
+      };
     </script>
+<script src="../static/js/utils.js"></script>
 {% endblock %}

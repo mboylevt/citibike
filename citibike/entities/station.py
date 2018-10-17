@@ -6,6 +6,7 @@ from citibike.entities.citibike_db import CitibikeDb
 
 STATION_TABLE = 'station'
 
+
 class Station():
     def __init__(self, station_id=None, name=None, short_name=None, lat=None, long=None, region_id = None,
                  rental_methods=None, capacity=None, rental_url=None, eightd_has_key_dispenser=None,

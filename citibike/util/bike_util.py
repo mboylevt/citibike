@@ -39,12 +39,29 @@ def __get_station_status():
         station_status_list.append(instance)
     return station_status_list
 
+
 def __init_region_map():
     regions = RegionDb().get_all_regions()
     region_map = {}
     for region in regions:
         region_map[region.name] = []
     return region_map
+
+
+def __add_station(station_id):
+    resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json')
+    data = resp.json()['data']['stations']
+    instance = Station()
+    for datum in data:
+        if datum['station_id'] == station_id:
+
+            for key, value in datum.items():
+                if hasattr(instance, key):
+                    setattr(instance, key, value)
+            StationDb().insert_station(instance)
+            break
+    return instance
+
 
 def get_ebikes():
 
@@ -55,21 +72,12 @@ def get_ebikes():
         if status.num_ebikes_available > 0:
             stn = StationDb().get_station_by_id(status.station_id)
             if not stn:
-                resp = requests.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json')
-                data = resp.json()['data']['stations']
-                instance = Station()
-                for datum in data:
-                    if datum['station_id'] == status.station_id:
-
-                        for key, value in datum.items():
-                            if hasattr(instance, key):
-                                setattr(instance, key, value)
-                        StationDb().insert_station(instance)
-                        break
-                stn = instance
+                stn = __add_station(status.station_id)
             rgn = RegionDb().get_region_by_id(stn.region_id)
-            region_map[rgn.name].append((stn, status))
+            if rgn:
+                region_map[rgn.name].append((stn, status))
     return region_map
+
 
 def get_region_status():
     '''
